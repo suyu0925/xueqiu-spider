@@ -1,0 +1,28 @@
+name: Debug with artifact
+
+on:
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  debug-with-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run script
+        run: bun run scripts/debugWithArtifact.ts
+
+      - name: Upload debug artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-artifact
+          path: debug-artifact

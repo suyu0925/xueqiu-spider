@@ -1,15 +1,13 @@
 name: Fetch Timeline
 
 on:
-  schedule:
-    - cron: "*/30 * * * *" # 每30分钟运行一次
   workflow_dispatch: # 允许手动触发
 
 jobs:
   fetch-timeline:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -19,7 +17,7 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
