@@ -28,16 +28,12 @@ const mergeTimeline = (a: UserTimelineStatus[], b: UserTimelineStatus[]): UserTi
   return Array.from(map.values())
 }
 
-const tasks = accounts.map(async (account) => {
-  const api = new XueqiuApi()
-  await api.init()
+const api = new XueqiuApi()
+await api.init()
+for (const account of accounts) {
   const timelineRes = await api.fetchUserTimeline(account.id)
   const oldTimeline = await loadExistingTimeline(account.id)
   const timeline = mergeTimeline(oldTimeline, timelineRes.statuses)
   await saveTimeline(account.id, timeline)
-  await api.dispose()
-})
-
-for (const task of tasks) {
-  await task
 }
+await api.dispose()
