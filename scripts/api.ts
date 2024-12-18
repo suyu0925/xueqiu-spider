@@ -20,6 +20,10 @@ export default class XueqiuApi {
     await this.browser.close()
   }
 
+  async screenshot(path: string) {
+    await this.page.screenshot({ path })
+  }
+
   async ignoreImages() {
     await this.page.setRequestInterception(true)
 
