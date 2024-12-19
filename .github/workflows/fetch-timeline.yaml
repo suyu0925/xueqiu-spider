@@ -1,6 +1,8 @@
 name: Fetch Timeline
 
 on:
+  schedule:
+    - cron: "*/30 * * * *" # 每30分钟拉取一次时间线
   workflow_dispatch: # 允许手动触发
 
 jobs:
