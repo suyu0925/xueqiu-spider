@@ -15,7 +15,7 @@ const loadExistingTimeline = async (userId: number): Promise<UserTimelineStatus[
 
 const saveTimeline = async (userId: number, timeline: UserTimelineStatus[]): Promise<void> => {
   const file = `./data/timeline_${userId}.json`
-  fs.writeFileSync(file, JSON.stringify(sortKeysRecursive(timeline), null, 4))
+  fs.writeFileSync(file, JSON.stringify(timeline.map(s => sortKeysRecursive(s)), null, 4))
 }
 
 const mergeTimeline = (a: UserTimelineStatus[], b: UserTimelineStatus[]): UserTimelineStatus[] => {
