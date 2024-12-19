@@ -2,21 +2,41 @@ import type { Browser, Page } from 'puppeteer'
 import puppeteer from 'puppeteer'
 import type { SearchUserRes, UserTimelineRes } from './api.types'
 
+const getProxy = () => {
+  if (!process.env.HTTP_PROXY) {
+    return null
+  }
+
+  const url = new URL(process.env.HTTP_PROXY)
+  return {
+    http_proxy: url.protocol + '//' + url.host,
+    username: url.username,
+    password: url.password,
+  }
+}
+
 export default class XueqiuApi {
   private browser!: Browser
   private page!: Page
 
   async init() {
+    const proxy = getProxy()
     this.browser = await puppeteer.launch({
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
-        ...(process.env.HTTP_PROXY
-          ? [`--proxy-server=${process.env.HTTP_PROXY}`]
+        ...(proxy
+          ? [`--proxy-server=${proxy.http_proxy}`]
           : []),
       ],
     })
     this.page = await this.browser.newPage()
+    if (proxy) {
+      await this.page.authenticate({
+        username: proxy.username,
+        password: proxy.password,
+      })
+    }
     await this.page.setViewport({ width: 1080, height: 1024 })
     await this.ignoreImages()
 
