@@ -1,4 +1,5 @@
 import fs from 'fs'
+import sortKeysRecursive from 'sort-keys-recursive'
 import accounts from "../dev-accounts.json" with { type: "json" }
 import XueqiuApi from './api'
 import type { UserTimelineStatus } from './api.types'
@@ -14,7 +15,7 @@ const loadExistingTimeline = async (userId: number): Promise<UserTimelineStatus[
 
 const saveTimeline = async (userId: number, timeline: UserTimelineStatus[]): Promise<void> => {
   const file = `./data/timeline_${userId}.json`
-  fs.writeFileSync(file, JSON.stringify(timeline, null, 4))
+  fs.writeFileSync(file, JSON.stringify(sortKeysRecursive(timeline), null, 4))
 }
 
 const mergeTimeline = (a: UserTimelineStatus[], b: UserTimelineStatus[]): UserTimelineStatus[] => {
@@ -33,7 +34,7 @@ await api.init()
 for (const account of accounts) {
   const timelineRes = await api.fetchUserTimeline(account.id)
   const oldTimeline = await loadExistingTimeline(account.id)
-  const timeline = mergeTimeline(oldTimeline, timelineRes.statuses)
+  const timeline = mergeTimeline(timelineRes.statuses, oldTimeline)
   await saveTimeline(account.id, timeline)
 }
 await api.dispose()

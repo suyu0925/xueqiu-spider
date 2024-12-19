@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "puppeteer": "^23.10.4",
+    "sort-keys-recursive": "^2.1.10",
     "type-fest": "^4.30.2"
   }
 }
