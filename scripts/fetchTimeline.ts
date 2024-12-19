@@ -29,12 +29,17 @@ const mergeTimeline = (a: UserTimelineStatus[], b: UserTimelineStatus[]): UserTi
   return Array.from(map.values())
 }
 
-const api = new XueqiuApi()
-await api.init()
-for (const account of accounts) {
-  const timelineRes = await api.fetchUserTimeline(account.id)
-  const oldTimeline = await loadExistingTimeline(account.id)
-  const timeline = mergeTimeline(timelineRes.statuses, oldTimeline)
-  await saveTimeline(account.id, timeline)
+try {
+  const api = new XueqiuApi()
+  await api.init()
+  for (const account of accounts) {
+    const timelineRes = await api.fetchUserTimeline(account.id)
+    const oldTimeline = await loadExistingTimeline(account.id)
+    const timeline = mergeTimeline(timelineRes.statuses, oldTimeline)
+    await saveTimeline(account.id, timeline)
+  }
+  await api.dispose()
+} catch (err) {
+  console.error(err)
+  process.exit(-1)
 }
-await api.dispose()
