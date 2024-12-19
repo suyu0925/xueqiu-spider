@@ -7,7 +7,9 @@ export default class XueqiuApi {
   private page!: Page
 
   async init() {
-    this.browser = await puppeteer.launch()
+    this.browser = await puppeteer.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    })
     this.page = await this.browser.newPage()
     await this.page.setViewport({ width: 1080, height: 1024 })
     await this.ignoreImages()

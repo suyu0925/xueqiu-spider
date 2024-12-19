@@ -1,0 +1,10 @@
+name: xueqiu-spider
+
+services:
+  xueqiu-spider:
+    container_name: xueqiu-spider
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data

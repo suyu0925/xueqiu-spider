@@ -1,6 +1,6 @@
-import XueqiuApi from './api'
 import fs from 'fs'
 import accounts from "../dev-accounts.json" with { type: "json" }
+import XueqiuApi from './api'
 import type { UserTimelineStatus } from './api.types'
 
 const loadExistingTimeline = async (userId: number): Promise<UserTimelineStatus[]> => {
